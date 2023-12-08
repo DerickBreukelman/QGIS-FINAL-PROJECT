@@ -1,0 +1,1 @@
+var json_RedeemerU_2 = {"type":"FeatureCollection","name":"RedeemerU_2","crs":{"type":"name","properties":{"name":"urn:ogc:def:crs:OGC:1.3:CRS84"}},"features":[{"type":"Feature","properties":{"id":null},"geometry":{"type":"Point","coordinates":[-79.949025204959298,43.209193465262807]}}]}
