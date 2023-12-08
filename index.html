@@ -8,19 +8,25 @@
         <meta name="apple-mobile-web-app-capable" content="yes">
         <link rel="stylesheet" href="css/leaflet.css">
         <link rel="stylesheet" href="css/qgis2web.css"><link rel="stylesheet" href="css/fontawesome-all.min.css">
+        <link rel="stylesheet" href="css/MarkerCluster.css">
+        <link rel="stylesheet" href="css/MarkerCluster.Default.css">
+        <link rel="stylesheet" href="css/leaflet-control-geocoder.Geocoder.css">
+        <link rel="stylesheet" href="css/leaflet-measure.css">
         <style>
         #map {
             width: 2260px;
             height: 1291px;
         }
         </style>
-        <title></title>
+        <title>International Restaurants Near Redeemer University</title>
     </head>
     <body>
         <div id="map">
         </div>
         <script src="js/qgis2web_expressions.js"></script>
         <script src="js/leaflet.js"></script>
+        <script src="js/multi-style-layer.js"></script>
+        <script src="js/leaflet-svg-shape-markers.min.js"></script>
         <script src="js/leaflet.rotatedMarker.js"></script>
         <script src="js/leaflet.pattern.js"></script>
         <script src="js/leaflet-hash.js"></script>
@@ -28,9 +34,11 @@
         <script src="js/rbush.min.js"></script>
         <script src="js/labelgun.min.js"></script>
         <script src="js/labels.js"></script>
-        <script src="data/Bikeways_1.js"></script>
-        <script src="data/Bike_Parking_2.js"></script>
-        <script src="data/InternationalRestaurants_3.js"></script>
+        <script src="js/leaflet-control-geocoder.Geocoder.js"></script>
+        <script src="js/leaflet-measure.js"></script>
+        <script src="js/leaflet.markercluster.js"></script>
+        <script src="data/InternationalRestaurants_1.js"></script>
+        <script src="data/RedeemerU_2.js"></script>
         <script>
         var highlightLayer;
         function highlightFeature(e) {
@@ -50,10 +58,22 @@
         }
         var map = L.map('map', {
             zoomControl:true, maxZoom:28, minZoom:1
-        }).fitBounds([[43.07607140916388,-80.1796096013101],[43.36328630022249,-79.48919413045309]]);
+        }).fitBounds([[43.20149041848223,-79.96251704847195],[43.21944411275195,-79.91936608154352]]);
         var hash = new L.Hash(map);
         map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
         var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
+        var measureControl = new L.Control.Measure({
+            position: 'topleft',
+            primaryLengthUnit: 'meters',
+            secondaryLengthUnit: 'kilometers',
+            primaryAreaUnit: 'sqmeters',
+            secondaryAreaUnit: 'hectares'
+        });
+        measureControl.addTo(map);
+        document.getElementsByClassName('leaflet-control-measure-toggle')[0]
+        .innerHTML = '';
+        document.getElementsByClassName('leaflet-control-measure-toggle')[0]
+        .className += ' fas fa-ruler';
         var bounds_group = new L.featureGroup([]);
         function setBounds() {
         }
@@ -70,224 +90,7 @@
         });
         layer_OSMStandard_0;
         map.addLayer(layer_OSMStandard_0);
-        function pop_Bikeways_1(feature, layer) {
-            layer.on({
-                mouseout: function(e) {
-                    for (i in e.target._eventParents) {
-                        e.target._eventParents[i].resetStyle(e.target);
-                    }
-                    if (typeof layer.closePopup == 'function') {
-                        layer.closePopup();
-                    } else {
-                        layer.eachLayer(function(feature){
-                            feature.closePopup()
-                        });
-                    }
-                },
-                mouseover: highlightFeature,
-            });
-            var popupContent = '<table>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['OBJECTID'] !== null ? autolinker.link(feature.properties['OBJECTID'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['NAME'] !== null ? autolinker.link(feature.properties['NAME'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['WARD'] !== null ? autolinker.link(feature.properties['WARD'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['LENGTH_IN_'] !== null ? autolinker.link(feature.properties['LENGTH_IN_'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['STATUS'] !== null ? autolinker.link(feature.properties['STATUS'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['BIKE_RIDE'] !== null ? autolinker.link(feature.properties['BIKE_RIDE'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['COMFORT_RA'] !== null ? autolinker.link(feature.properties['COMFORT_RA'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['GRADE'] !== null ? autolinker.link(feature.properties['GRADE'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['GREENBELT_'] !== null ? autolinker.link(feature.properties['GREENBELT_'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['GREENBEL_1'] !== null ? autolinker.link(feature.properties['GREENBEL_1'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['GREENWAY_R'] !== null ? autolinker.link(feature.properties['GREENWAY_R'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['HAMBUR_LOO'] !== null ? autolinker.link(feature.properties['HAMBUR_LOO'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['METROLINX_'] !== null ? autolinker.link(feature.properties['METROLINX_'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['ONEWAY_DIR'] !== null ? autolinker.link(feature.properties['ONEWAY_DIR'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['ONTARIO_BI'] !== null ? autolinker.link(feature.properties['ONTARIO_BI'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['PROVINCIAL'] !== null ? autolinker.link(feature.properties['PROVINCIAL'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['TRANSCANAD'] !== null ? autolinker.link(feature.properties['TRANSCANAD'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['TYPE'] !== null ? autolinker.link(feature.properties['TYPE'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['TYPE_DETAI'] !== null ? autolinker.link(feature.properties['TYPE_DETAI'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['NEW_UPGRAD'] !== null ? autolinker.link(feature.properties['NEW_UPGRAD'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['USERS'] !== null ? autolinker.link(feature.properties['USERS'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['WATERFRONT'] !== null ? autolinker.link(feature.properties['WATERFRONT'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['WINTER_MAI'] !== null ? autolinker.link(feature.properties['WINTER_MAI'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['Shape__Len'] !== null ? autolinker.link(feature.properties['Shape__Len'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                </table>';
-            layer.bindPopup(popupContent, {maxHeight: 400});
-        }
-
-        function style_Bikeways_1_0() {
-            return {
-                pane: 'pane_Bikeways_1',
-                opacity: 1,
-                color: 'rgba(60,0,255,1.0)',
-                dashArray: '',
-                lineCap: 'square',
-                lineJoin: 'bevel',
-                weight: 4.0,
-                fillOpacity: 0,
-                interactive: false,
-            }
-        }
-        map.createPane('pane_Bikeways_1');
-        map.getPane('pane_Bikeways_1').style.zIndex = 401;
-        map.getPane('pane_Bikeways_1').style['mix-blend-mode'] = 'normal';
-        var layer_Bikeways_1 = new L.geoJson(json_Bikeways_1, {
-            attribution: '',
-            interactive: false,
-            dataVar: 'json_Bikeways_1',
-            layerName: 'layer_Bikeways_1',
-            pane: 'pane_Bikeways_1',
-            onEachFeature: pop_Bikeways_1,
-            style: style_Bikeways_1_0,
-        });
-        bounds_group.addLayer(layer_Bikeways_1);
-        map.addLayer(layer_Bikeways_1);
-        function pop_Bike_Parking_2(feature, layer) {
-            layer.on({
-                mouseout: function(e) {
-                    for (i in e.target._eventParents) {
-                        e.target._eventParents[i].resetStyle(e.target);
-                    }
-                    if (typeof layer.closePopup == 'function') {
-                        layer.closePopup();
-                    } else {
-                        layer.eachLayer(function(feature){
-                            feature.closePopup()
-                        });
-                    }
-                },
-                mouseover: highlightFeature,
-            });
-            var popupContent = '<table>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['OBJECTID'] !== null ? autolinker.link(feature.properties['OBJECTID'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['LOCATION_N'] !== null ? autolinker.link(feature.properties['LOCATION_N'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">ADDRESS</th>\
-                        <td>' + (feature.properties['ADDRESS'] !== null ? autolinker.link(feature.properties['ADDRESS'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['RACK_OWNER'] !== null ? autolinker.link(feature.properties['RACK_OWNER'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['RACKS_INST'] !== null ? autolinker.link(feature.properties['RACKS_INST'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['RACK_TYPE'] !== null ? autolinker.link(feature.properties['RACK_TYPE'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['TOTAL_CAPA'] !== null ? autolinker.link(feature.properties['TOTAL_CAPA'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['COVERED'] !== null ? autolinker.link(feature.properties['COVERED'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['NEARBY_LIG'] !== null ? autolinker.link(feature.properties['NEARBY_LIG'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['WARD'] !== null ? autolinker.link(feature.properties['WARD'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['EXTERNAL_'] !== null ? autolinker.link(feature.properties['EXTERNAL_'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['LATITUDE'] !== null ? autolinker.link(feature.properties['LATITUDE'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['LONGITUDE'] !== null ? autolinker.link(feature.properties['LONGITUDE'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                </table>';
-            layer.bindPopup(popupContent, {maxHeight: 400});
-        }
-
-        function style_Bike_Parking_2_0() {
-            return {
-                pane: 'pane_Bike_Parking_2',
-                radius: 4.0,
-                opacity: 1,
-                color: 'rgba(35,35,35,1.0)',
-                dashArray: '',
-                lineCap: 'butt',
-                lineJoin: 'miter',
-                weight: 1,
-                fill: true,
-                fillOpacity: 1,
-                fillColor: 'rgba(226,239,45,1.0)',
-                interactive: false,
-            }
-        }
-        map.createPane('pane_Bike_Parking_2');
-        map.getPane('pane_Bike_Parking_2').style.zIndex = 402;
-        map.getPane('pane_Bike_Parking_2').style['mix-blend-mode'] = 'normal';
-        var layer_Bike_Parking_2 = new L.geoJson(json_Bike_Parking_2, {
-            attribution: '',
-            interactive: false,
-            dataVar: 'json_Bike_Parking_2',
-            layerName: 'layer_Bike_Parking_2',
-            pane: 'pane_Bike_Parking_2',
-            onEachFeature: pop_Bike_Parking_2,
-            pointToLayer: function (feature, latlng) {
-                var context = {
-                    feature: feature,
-                    variables: {}
-                };
-                return L.circleMarker(latlng, style_Bike_Parking_2_0(feature));
-            },
-        });
-        bounds_group.addLayer(layer_Bike_Parking_2);
-        map.addLayer(layer_Bike_Parking_2);
-        function pop_InternationalRestaurants_3(feature, layer) {
+        function pop_InternationalRestaurants_1(feature, layer) {
             layer.on({
                 mouseout: function(e) {
                     for (i in e.target._eventParents) {
@@ -309,8 +112,16 @@
                         <td>' + (feature.properties['Name'] !== null ? autolinker.link(feature.properties['Name'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
+                        <th scope="row">Address</th>\
+                        <td>' + (feature.properties['Address'] !== null ? autolinker.link(feature.properties['Address'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
                         <th scope="row">Origin</th>\
                         <td>' + (feature.properties['Origin'] !== null ? autolinker.link(feature.properties['Origin'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Dine-in</th>\
+                        <td>' + (feature.properties['Dine-in'] !== null ? autolinker.link(feature.properties['Dine-in'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
                         <th scope="row">Takeout</th>\
@@ -321,37 +132,29 @@
                         <td>' + (feature.properties['Delivery'] !== null ? autolinker.link(feature.properties['Delivery'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <th scope="row">Dine-in</th>\
-                        <td>' + (feature.properties['Dine-in'] !== null ? autolinker.link(feature.properties['Dine-in'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">Stars 1-10</th>\
-                        <td>' + (feature.properties['Stars 1-10'] !== null ? autolinker.link(feature.properties['Stars 1-10'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">Vegetarian</th>\
+                        <th scope="row">Vegetarian Options</th>\
                         <td>' + (feature.properties['Vegetarian'] !== null ? autolinker.link(feature.properties['Vegetarian'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <th scope="row">Vegan</th>\
+                        <th scope="row">Vegan Options</th>\
                         <td>' + (feature.properties['Vegan'] !== null ? autolinker.link(feature.properties['Vegan'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <th scope="row">Address</th>\
-                        <td>' + (feature.properties['Address'] !== null ? autolinker.link(feature.properties['Address'].toLocaleString()) : '') + '</td>\
+                        <th scope="row">Gluten Free Options</th>\
+                        <td>' + (feature.properties['GlutenFree'] !== null ? autolinker.link(feature.properties['GlutenFree'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <th scope="row">GlutenFree</th>\
-                        <td>' + (feature.properties['GlutenFree'] !== null ? autolinker.link(feature.properties['GlutenFree'].toLocaleString()) : '') + '</td>\
+                        <th scope="row">Rating (1-10)</th>\
+                        <td>' + (feature.properties['Stars 1-10'] !== null ? autolinker.link(feature.properties['Stars 1-10'].toLocaleString()) : '') + '</td>\
                     </tr>\
                 </table>';
             layer.bindPopup(popupContent, {maxHeight: 400});
         }
 
-        function style_InternationalRestaurants_3_0() {
+        function style_InternationalRestaurants_1_0() {
             return {
-                pane: 'pane_InternationalRestaurants_3',
-                radius: 8.000000000000004,
+                pane: 'pane_InternationalRestaurants_1',
+                radius: 8.0,
                 opacity: 1,
                 color: 'rgba(35,35,35,1.0)',
                 dashArray: '',
@@ -360,32 +163,153 @@
                 weight: 1,
                 fill: true,
                 fillOpacity: 1,
-                fillColor: 'rgba(229,0,4,1.0)',
+                fillColor: 'rgba(242,255,0,1.0)',
                 interactive: true,
             }
         }
-        map.createPane('pane_InternationalRestaurants_3');
-        map.getPane('pane_InternationalRestaurants_3').style.zIndex = 403;
-        map.getPane('pane_InternationalRestaurants_3').style['mix-blend-mode'] = 'normal';
-        var layer_InternationalRestaurants_3 = new L.geoJson(json_InternationalRestaurants_3, {
+        map.createPane('pane_InternationalRestaurants_1');
+        map.getPane('pane_InternationalRestaurants_1').style.zIndex = 401;
+        map.getPane('pane_InternationalRestaurants_1').style['mix-blend-mode'] = 'normal';
+        var layer_InternationalRestaurants_1 = new L.geoJson(json_InternationalRestaurants_1, {
             attribution: '',
             interactive: true,
-            dataVar: 'json_InternationalRestaurants_3',
-            layerName: 'layer_InternationalRestaurants_3',
-            pane: 'pane_InternationalRestaurants_3',
-            onEachFeature: pop_InternationalRestaurants_3,
+            dataVar: 'json_InternationalRestaurants_1',
+            layerName: 'layer_InternationalRestaurants_1',
+            pane: 'pane_InternationalRestaurants_1',
+            onEachFeature: pop_InternationalRestaurants_1,
             pointToLayer: function (feature, latlng) {
                 var context = {
                     feature: feature,
                     variables: {}
                 };
-                return L.circleMarker(latlng, style_InternationalRestaurants_3_0(feature));
+                return L.circleMarker(latlng, style_InternationalRestaurants_1_0(feature));
             },
         });
-        bounds_group.addLayer(layer_InternationalRestaurants_3);
-        map.addLayer(layer_InternationalRestaurants_3);
+        var cluster_InternationalRestaurants_1 = new L.MarkerClusterGroup({showCoverageOnHover: false,
+            spiderfyDistanceMultiplier: 2});
+        cluster_InternationalRestaurants_1.addLayer(layer_InternationalRestaurants_1);
+
+        bounds_group.addLayer(layer_InternationalRestaurants_1);
+        cluster_InternationalRestaurants_1.addTo(map);
+        function pop_RedeemerU_2(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                    if (typeof layer.closePopup == 'function') {
+                        layer.closePopup();
+                    } else {
+                        layer.eachLayer(function(feature){
+                            feature.closePopup()
+                        });
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['id'] !== null ? autolinker.link(feature.properties['id'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_RedeemerU_2_0() {
+            return {
+                pane: 'pane_RedeemerU_2',
+                radius: 13.2,
+                opacity: 1,
+                color: 'rgba(184,8,8,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(184,8,8,1.0)',
+                interactive: true,
+            }
+        }
+        function style_RedeemerU_2_1() {
+            return {
+                pane: 'pane_RedeemerU_2',
+                radius: 14.4,
+                opacity: 1,
+                color: 'rgba(255,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,0,0,1.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_RedeemerU_2');
+        map.getPane('pane_RedeemerU_2').style.zIndex = 402;
+        map.getPane('pane_RedeemerU_2').style['mix-blend-mode'] = 'normal';
+        var layer_RedeemerU_2 = new L.geoJson.multiStyle(json_RedeemerU_2, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_RedeemerU_2',
+            layerName: 'layer_RedeemerU_2',
+            pane: 'pane_RedeemerU_2',
+            onEachFeature: pop_RedeemerU_2,
+            pointToLayers: [function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.shapeMarker(latlng, style_RedeemerU_2_0(feature));
+            },function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.shapeMarker(latlng, style_RedeemerU_2_1(feature));
+            },
+        ]});
+        bounds_group.addLayer(layer_RedeemerU_2);
+        map.addLayer(layer_RedeemerU_2);
+            var title = new L.Control();
+            title.onAdd = function (map) {
+                this._div = L.DomUtil.create('div', 'info');
+                this.update();
+                return this._div;
+            };
+            title.update = function () {
+                this._div.innerHTML = '<h2>International Restaurants Near Redeemer University</h2>';
+            };
+            title.addTo(map);
+            var abstract = new L.Control({'position':'bottomright'});
+            abstract.onAdd = function (map) {
+                this._div = L.DomUtil.create('div',
+                'leaflet-control abstract');
+                this._div.id = 'abstract'
+
+                    abstract.show();
+                    return this._div;
+                };
+                abstract.show = function () {
+                    this._div.classList.remove("abstract");
+                    this._div.classList.add("abstractUncollapsed");
+                    this._div.innerHTML = 'This map displays international restaurants in close proximity to Redeemer University. The map is a practical guide for navigating the international eating options located around Hamilton.';
+            };
+            abstract.addTo(map);
+        var osmGeocoder = new L.Control.Geocoder({
+            collapsed: true,
+            position: 'topleft',
+            text: 'Search',
+            title: 'Testing'
+        }).addTo(map);
+        document.getElementsByClassName('leaflet-control-geocoder-icon')[0]
+        .className += ' fa fa-search';
+        document.getElementsByClassName('leaflet-control-geocoder-icon')[0]
+        .title += 'Search for a place';
         var baseMaps = {};
-        L.control.layers(baseMaps,{'<img src="legend/InternationalRestaurants_3.png" /> International Restaurants': layer_InternationalRestaurants_3,'<img src="legend/Bike_Parking_2.png" /> Bike_Parking': layer_Bike_Parking_2,'<img src="legend/Bikeways_1.png" /> Bikeways': layer_Bikeways_1,"OSM Standard": layer_OSMStandard_0,},{collapsed:false}).addTo(map);
+        L.control.layers(baseMaps,{'<img src="legend/RedeemerU_2.png" /> Redeemer U': layer_RedeemerU_2,'<img src="legend/InternationalRestaurants_1.png" /> International Restaurants': cluster_InternationalRestaurants_1,"OSM Standard": layer_OSMStandard_0,}).addTo(map);
         setBounds();
         </script>
     </body>
